@@ -1,0 +1,29 @@
+# Ignore the bin and obj folders
+bin/
+obj/
+
+# Ignore build outputs
+*.exe
+*.dll
+*.apphost.exe
+
+# Ignore user-specific files
+*.user
+*.suo
+
+# Ignore log files
+*.log
+
+# Ignore temporary files
+*.tmp
+*.bak
+
+# Ignore any files in the node_modules directory
+node_modules/
+
+# Ignore environment variables
+.env
+
+# Ignore vs code folder 
+.vs
+
