@@ -10,21 +10,10 @@ public class Cat
   public int CatId { get; set;}
   public int Width { get; set;}
   public int Height { get; set;}
-  public ImageStruct Image { get; set;}
   public DateTime CreatedAt { get; set;} = DateTime.UtcNow;
   
+
+  public ImageClass Image { get; set;}
   // N <--> N Relationship
   public ICollection<Tag> Tags {get; set;}
-}
-
-
-public struct ImageStruct
-{
-  public string ImageId { get; set; }
-  public string Url { get; set; }
-  public string Description { get; set; }
-  public int Width {  get; set; }
-  public int Height { get; set; }
-
-  
 }

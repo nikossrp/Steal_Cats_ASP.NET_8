@@ -12,7 +12,7 @@ using StealCatsService.Data;
 namespace StealCatsService.Data.Migrations
 {
     [DbContext(typeof(CatDbContent))]
-    [Migration("20241018165622_InitialCreate")]
+    [Migration("20241018190752_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -57,12 +57,39 @@ namespace StealCatsService.Data.Migrations
                     b.Property<int>("Height")
                         .HasColumnType("int");
 
+                    b.Property<string>("ImageId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<int>("Width")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ImageId");
+
                     b.ToTable("Cats");
+                });
+
+            modelBuilder.Entity("StealCatsService.Entities.ImageClass", b =>
+                {
+                    b.Property<string>("ImageId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Height")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Url")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Width")
+                        .HasColumnType("int");
+
+                    b.HasKey("ImageId");
+
+                    b.ToTable("Images");
                 });
 
             modelBuilder.Entity("StealCatsService.Entities.Tag", b =>
@@ -94,6 +121,15 @@ namespace StealCatsService.Data.Migrations
                         .HasForeignKey("TagsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("StealCatsService.Entities.Cat", b =>
+                {
+                    b.HasOne("StealCatsService.Entities.ImageClass", "Image")
+                        .WithMany()
+                        .HasForeignKey("ImageId");
+
+                    b.Navigation("Image");
                 });
 #pragma warning restore 612, 618
         }

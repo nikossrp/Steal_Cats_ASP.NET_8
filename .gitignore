@@ -24,6 +24,9 @@ node_modules/
 # Ignore environment variables
 .env
 
+<<<<<<< HEAD
 # Ignore vs code folder 
 .vs
+=======
+>>>>>>> a8c2d86 (Entities:done,docker:done,Fetch25:done)
 
