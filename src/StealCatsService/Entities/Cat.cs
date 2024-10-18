@@ -13,7 +13,7 @@ public class Cat
   public DateTime CreatedAt { get; set;} = DateTime.UtcNow;
   
 
-  public ImageClass Image { get; set;}
+  public CatImage Image { get; set;}
   // N <--> N Relationship
   public ICollection<Tag> Tags {get; set;}
 }

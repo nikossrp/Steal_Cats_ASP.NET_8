@@ -36,7 +36,4 @@ public class CatsController : ControllerBase
       return StatusCode(500, $"Error occured: {ex.Message}");
     }
   }
-
-   
-
 }
