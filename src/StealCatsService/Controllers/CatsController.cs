@@ -1,8 +1,5 @@
 using System;
-using System.Text.Json;
-using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using StealCatsService.Data;
 using StealCatsService.Entities;
 
@@ -25,9 +22,10 @@ public class CatsController : ControllerBase
     string breeds = "has_breeds=true";
     int nImageCats = 1;
 
-    string url = $"https://api.thecatapi.com/v1/images/search?limit={nImageCats}&{breeds}&api_key={apiKey}?";
     // https://api.thecatapi.com/v1/images/search?limit=1&has_breeds=true&api_key=live_KRXInFTvQOVG2t5MbHVEJOccLWcJpW401uMFrRhwSUaIYtlOoY58n5WnEnMc4W1z&id
     // https://api.thecatapi.com/v1/images/N8bl5RjPG
+    string url = $"https://api.thecatapi.com/v1/images/search?limit={nImageCats}&{breeds}&api_key={apiKey}?";
+    
     try 
     {
       var response = await _httpClient.GetAsync(url);
@@ -46,11 +44,5 @@ public class CatsController : ControllerBase
     {
       return StatusCode(500, $"Error occured: {ex.Message}");
     }
-
-
-
-
-
-
   }
 }

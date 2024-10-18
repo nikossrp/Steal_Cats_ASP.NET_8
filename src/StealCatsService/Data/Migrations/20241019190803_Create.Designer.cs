@@ -12,8 +12,8 @@ using StealCatsService.Data;
 namespace StealCatsService.Data.Migrations
 {
     [DbContext(typeof(CatDbContent))]
-    [Migration("20241018190752_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20241019190803_Create")]
+    partial class Create
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -70,22 +70,16 @@ namespace StealCatsService.Data.Migrations
                     b.ToTable("Cats");
                 });
 
-            modelBuilder.Entity("StealCatsService.Entities.ImageClass", b =>
+            modelBuilder.Entity("StealCatsService.Entities.CatImage", b =>
                 {
                     b.Property<string>("ImageId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Description")
+                    b.Property<string>("Breed_Temperament")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Height")
-                        .HasColumnType("int");
 
                     b.Property<string>("Url")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Width")
-                        .HasColumnType("int");
 
                     b.HasKey("ImageId");
 
@@ -125,7 +119,7 @@ namespace StealCatsService.Data.Migrations
 
             modelBuilder.Entity("StealCatsService.Entities.Cat", b =>
                 {
-                    b.HasOne("StealCatsService.Entities.ImageClass", "Image")
+                    b.HasOne("StealCatsService.Entities.CatImage", "Image")
                         .WithMany()
                         .HasForeignKey("ImageId");
 
