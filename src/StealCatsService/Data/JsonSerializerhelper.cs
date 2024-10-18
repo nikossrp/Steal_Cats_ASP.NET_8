@@ -1,26 +1,41 @@
 using System;
+using System.Text.Json;
 using StealCatsService.Entities;
 
 namespace StealCatsService.Data;
 
 public class JsonSerializerHelper
 {
-  public static CatImage CatDeserializer(string Json)
+  public static List<CatImage> CatDeserializer(string JsonString)
   {
+    
     // string [] jsonArr = SplitBetweenDelimiters(Json, "", "");
-    CatImage catImage = new CatImage();
-    catImage.ImageId = "awdq";//jsonArr[0];
-    catImage.Url = "adw";//jsonArr[1];
-    catImage.Width = 1;//Int32.Parse(jsonArr[2]);
-    catImage.Height = 2;//Int32.Parse(jsonArr[3]);
+    List<CatImage> catImageList = new List<CatImage>();
 
-    return catImage;
+    foreach (JsonElement item in JsonDocument.Parse(JsonString).RootElement.EnumerateArray())
+    {
+        CatImage catImage = new CatImage();
+        catImage.ImageId = item.GetProperty("id").GetString();
+
+        catImage.Url = item.GetProperty("url").GetString();
+        catImage.Width = item.GetProperty("width").GetInt32();
+        catImage.Height = item.GetProperty("height").GetInt32();
+        if (item.TryGetProperty("breeds", out JsonElement breedsArray))
+        {
+          foreach(JsonElement breed in breedsArray.EnumerateArray())
+          {
+            string breedId = breed.GetProperty("id").GetString();
+            string temperament = breed.GetProperty("temperament").GetString();
+            catImage.Breed_Temperament = temperament.Split(',').ToList();
+          }
+        }
+
+        catImageList.Add(catImage);
+    }
+
+    return catImageList;
   }
 
-  private static string[] SplitBetweenDelimiters(string input, string startDel, string endDel)
-  {
 
 
-    return [];
-  }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Text.Json;
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using StealCatsService.Data;
@@ -20,25 +21,22 @@ public class CatsController : ControllerBase
   [HttpPost("fetch")]
   public async Task<IActionResult> FetchCatsImages()
   {
+    string apiKey = "live_KRXInFTvQOVG2t5MbHVEJOccLWcJpW401uMFrRhwSUaIYtlOoY58n5WnEnMc4W1z";
+    string breeds = "has_breeds=true";
+    int nImageCats = 1;
 
-    string url = "https://api.thecatapi.com/v1/images/search";
-    int nImageCats = 25;
-
+    string url = $"https://api.thecatapi.com/v1/images/search?limit={nImageCats}&{breeds}&api_key={apiKey}?";
+    // https://api.thecatapi.com/v1/images/search?limit=1&has_breeds=true&api_key=live_KRXInFTvQOVG2t5MbHVEJOccLWcJpW401uMFrRhwSUaIYtlOoY58n5WnEnMc4W1z&id
+    // https://api.thecatapi.com/v1/images/N8bl5RjPG
     try 
     {
       var response = await _httpClient.GetAsync(url);
       if (response.IsSuccessStatusCode) 
       {
-        CatImage[] catImagesArr = new CatImage[nImageCats];
+        var data = await response.Content.ReadAsStringAsync();
+        List<CatImage> dataCat = JsonSerializerHelper.CatDeserializer(data);
 
-        for (int i = 0; i < nImageCats; i++ ) 
-        {
-          var data = await response.Content.ReadAsStringAsync();
-          var catImage = JsonSerializerHelper.CatDeserializer(data);
-          catImagesArr[i] = catImage;
-        }
-        
-        return Ok(catImagesArr[0].ImageId);
+        return Ok(dataCat[0].Breed_Temperament[0]);
       }
 
       return StatusCode((int)response.StatusCode);

@@ -3,6 +3,8 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json;
 using Microsoft.VisualBasic;
+using System.Text.Json;
+using Microsoft.VisualBasic;
 
 namespace StealCatsService.Entities;
 
@@ -14,4 +16,5 @@ public class CatImage
   public string Url { get; set; }
   public int Width {  get; set; }
   public int Height { get; set; }
+  public List<string> Breed_Temperament { get; set; }
 }
