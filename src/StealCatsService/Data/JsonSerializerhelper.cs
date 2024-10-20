@@ -6,16 +6,16 @@ namespace StealCatsService.Data;
 
 public class JsonSerializerHelper
 {
-  public static List<CatImage> CatDeserializer(string JsonString)
+  public static List<CatDto> CatDeserializer(string JsonString)
   {
     
     // string [] jsonArr = SplitBetweenDelimiters(Json, "", "");
-    List<CatImage> catImageList = new List<CatImage>();
+    List<CatDto> catImageList = new List<CatDto>();
 
     foreach (JsonElement item in JsonDocument.Parse(JsonString).RootElement.EnumerateArray())
     {
-        CatImage catImage = new CatImage();
-        catImage.ImageId = item.GetProperty("id").GetString();
+        CatDto catImage = new CatDto();
+        catImage.CatId = item.GetProperty("id").GetString();
 
         catImage.Url = item.GetProperty("url").GetString();
         catImage.Width = item.GetProperty("width").GetInt32();
@@ -24,11 +24,12 @@ public class JsonSerializerHelper
         {
           foreach(JsonElement breed in breedsArray.EnumerateArray())
           {
-            string breedId = breed.GetProperty("id").GetString();
-            string temperament = breed.GetProperty("temperament").GetString();
-            catImage.Breed_Temperament = temperament.Split(',').ToList();
+            catImage.BreedId = breed.GetProperty("id").GetString();
+            catImage.Breed_Temperament = breed.GetProperty("temperament").GetString();
           }
         }
+
+        Console.WriteLine(catImage.Url);
 
         catImageList.Add(catImage);
     }

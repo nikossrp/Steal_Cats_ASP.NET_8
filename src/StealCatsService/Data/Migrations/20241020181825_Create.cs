@@ -12,16 +12,19 @@ namespace StealCatsService.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Images",
+                name: "Cats",
                 columns: table => new
                 {
-                    ImageId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Url = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Breed_Temperament = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CatId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Width = table.Column<int>(type: "int", nullable: false),
+                    Height = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Images", x => x.ImageId);
+                    table.PrimaryKey("PK_Cats", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -38,29 +41,28 @@ namespace StealCatsService.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Cats",
+                name: "Image",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CatId = table.Column<int>(type: "int", nullable: false),
-                    Width = table.Column<int>(type: "int", nullable: false),
-                    Height = table.Column<int>(type: "int", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ImageId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    Url = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BreedId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CatImageForeignKey = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Cats", x => x.Id);
+                    table.PrimaryKey("PK_Image", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Cats_Images_ImageId",
-                        column: x => x.ImageId,
-                        principalTable: "Images",
-                        principalColumn: "ImageId");
+                        name: "FK_Image_Cats_CatImageForeignKey",
+                        column: x => x.CatImageForeignKey,
+                        principalTable: "Cats",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "CatTag",
+                name: "CatTags",
                 columns: table => new
                 {
                     CatsId = table.Column<int>(type: "int", nullable: false),
@@ -68,15 +70,15 @@ namespace StealCatsService.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CatTag", x => new { x.CatsId, x.TagsId });
+                    table.PrimaryKey("PK_CatTags", x => new { x.CatsId, x.TagsId });
                     table.ForeignKey(
-                        name: "FK_CatTag_Cats_CatsId",
+                        name: "FK_CatTags_Cats_CatsId",
                         column: x => x.CatsId,
                         principalTable: "Cats",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_CatTag_Tags_TagsId",
+                        name: "FK_CatTags_Tags_TagsId",
                         column: x => x.TagsId,
                         principalTable: "Tags",
                         principalColumn: "Id",
@@ -84,30 +86,31 @@ namespace StealCatsService.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Cats_ImageId",
-                table: "Cats",
-                column: "ImageId");
+                name: "IX_CatTags_TagsId",
+                table: "CatTags",
+                column: "TagsId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CatTag_TagsId",
-                table: "CatTag",
-                column: "TagsId");
+                name: "IX_Image_CatImageForeignKey",
+                table: "Image",
+                column: "CatImageForeignKey",
+                unique: true);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "CatTag");
+                name: "CatTags");
 
             migrationBuilder.DropTable(
-                name: "Cats");
+                name: "Image");
 
             migrationBuilder.DropTable(
                 name: "Tags");
 
             migrationBuilder.DropTable(
-                name: "Images");
+                name: "Cats");
         }
     }
 }

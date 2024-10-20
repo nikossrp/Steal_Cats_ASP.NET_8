@@ -12,7 +12,7 @@ using StealCatsService.Data;
 namespace StealCatsService.Data.Migrations
 {
     [DbContext(typeof(CatDbContent))]
-    [Migration("20241019190803_Create")]
+    [Migration("20241020181825_Create")]
     partial class Create
     {
         /// <inheritdoc />
@@ -37,7 +37,7 @@ namespace StealCatsService.Data.Migrations
 
                     b.HasIndex("TagsId");
 
-                    b.ToTable("CatTag");
+                    b.ToTable("CatTags", (string)null);
                 });
 
             modelBuilder.Entity("StealCatsService.Entities.Cat", b =>
@@ -48,8 +48,8 @@ namespace StealCatsService.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CatId")
-                        .HasColumnType("int");
+                    b.Property<string>("CatId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -57,33 +57,37 @@ namespace StealCatsService.Data.Migrations
                     b.Property<int>("Height")
                         .HasColumnType("int");
 
-                    b.Property<string>("ImageId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<int>("Width")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ImageId");
 
                     b.ToTable("Cats");
                 });
 
             modelBuilder.Entity("StealCatsService.Entities.CatImage", b =>
                 {
-                    b.Property<string>("ImageId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.Property<string>("Breed_Temperament")
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("BreedId")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CatImageForeignKey")
+                        .HasColumnType("int");
 
                     b.Property<string>("Url")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ImageId");
+                    b.HasKey("Id");
 
-                    b.ToTable("Images");
+                    b.HasIndex("CatImageForeignKey")
+                        .IsUnique();
+
+                    b.ToTable("Image");
                 });
 
             modelBuilder.Entity("StealCatsService.Entities.Tag", b =>
@@ -117,12 +121,19 @@ namespace StealCatsService.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("StealCatsService.Entities.CatImage", b =>
+                {
+                    b.HasOne("StealCatsService.Entities.Cat", "Cat")
+                        .WithOne("Image")
+                        .HasForeignKey("StealCatsService.Entities.CatImage", "CatImageForeignKey")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cat");
+                });
+
             modelBuilder.Entity("StealCatsService.Entities.Cat", b =>
                 {
-                    b.HasOne("StealCatsService.Entities.CatImage", "Image")
-                        .WithMany()
-                        .HasForeignKey("ImageId");
-
                     b.Navigation("Image");
                 });
 #pragma warning restore 612, 618

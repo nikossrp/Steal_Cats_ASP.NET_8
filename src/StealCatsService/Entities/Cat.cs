@@ -6,14 +6,14 @@ namespace StealCatsService.Entities;
 [Table("Cats")]
 public class Cat
 {
+  
   public int Id { get; set;}
-  public int CatId { get; set;}
+  public string CatId { get; set;}
   public int Width { get; set;}
   public int Height { get; set;}
   public DateTime CreatedAt { get; set;} = DateTime.UtcNow;
   
-
-  public CatImage Image { get; set;}
-  // N <--> N Relationship
-  public ICollection<Tag> Tags {get; set;}
+  // Reference navigation to dependent
+  public CatImage Image { get; set;}    // 1-to-1 relationship
+  public ICollection<Tag> Tags {get; set;}  // N <--> N Relationship
 }

@@ -40,9 +40,10 @@
               "RelativeDocumentMoniker": "src\\StealCatsService\\Program.cs",
               "ToolTip": "C:\\Users\\serep\\OneDrive\\Desktop\\Web_technologies\\.Net_Csharp\\Natech_Assessment\\Steal_all_Cats\\src\\StealCatsService\\Program.cs",
               "RelativeToolTip": "src\\StealCatsService\\Program.cs",
-              "ViewState": "AQIAAAEAAAAAAAAAAAAAwBoAAAAVAAAA",
+              "ViewState": "AQIAAA0AAAAAAAAAAAAAwBoAAAAVAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-18T16:13:18.542Z"
+              "WhenOpened": "2024-10-18T16:13:18.542Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -52,7 +53,7 @@
               "RelativeDocumentMoniker": "src\\StealCatsService\\Controllers\\CatsController.cs",
               "ToolTip": "C:\\Users\\serep\\OneDrive\\Desktop\\Web_technologies\\.Net_Csharp\\Natech_Assessment\\Steal_all_Cats\\src\\StealCatsService\\Controllers\\CatsController.cs",
               "RelativeToolTip": "src\\StealCatsService\\Controllers\\CatsController.cs",
-              "ViewState": "AQIAAAcAAAAAAAAAAAAgwBMAAAAAAAAA",
+              "ViewState": "AQIAACcAAAAAAAAAAAAAADYAAAAMAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-10-18T16:10:17.993Z",
               "EditorCaption": ""

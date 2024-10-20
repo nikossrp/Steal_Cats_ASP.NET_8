@@ -1,6 +1,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using StealCatsService.Controllers;
 using StealCatsService.Entities;
 
 namespace StealCatsService.Data;
@@ -11,36 +12,21 @@ public class CatDbContent : DbContext
     {
     }
 
-    public DbSet<Cat> Cats { get; set; }    // Tables Cats, Tags 
+    public DbSet<Cat> Cats { get; set; }    // Tables Cats
+    public DbSet<Tag> Tags { get; set;}
+    public DbSet<CatImage> CatImages { get; set;}
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // ValueComparer for List<string>
-        var stringListComparer = new ValueComparer<List<string>>(
-            (c1, c2) => c1.SequenceEqual(c2),  // Compare list contents
-            c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),  // Hash code for the list
-            c => c.ToList() 
-        );
+        modelBuilder.Entity<Cat>()
+            .HasMany(c => c.Tags)
+            .WithMany(c => c.Cats);    // Join table for the many-to-many relationship
+            
 
-
-        // Cat
-        modelBuilder.Entity<CatImage>().Property(x => x.Breed_Temperament)
-            .HasConversion(     // Converts List<string> to a comma-separated string for storing in the DB
-                v => string.Join(",", v),      
-                v => v.Split(',', StringSplitOptions.RemoveEmptyEntries).ToList()
-            )
-            .Metadata
-            .SetValueComparer(stringListComparer);
-
-        // Tag
-        modelBuilder.Entity<Tag>().Property(x => x.Name)
-            .HasConversion(     // Converts List<string> to a comma-separated string for storing in the DB
-                v => string.Join(",", v),      
-                v => v.Split(',', StringSplitOptions.RemoveEmptyEntries).ToList()
-            )
-            .Metadata
-            .SetValueComparer(stringListComparer);
-
+        modelBuilder.Entity<Cat>() 
+            .HasOne(c => c.Image)
+            .WithOne(i => i.Cat)
+            .HasForeignKey<CatImage>(i => i.CatImageForeignKey);   // Foreign key in Cats table        
     }
 
 }

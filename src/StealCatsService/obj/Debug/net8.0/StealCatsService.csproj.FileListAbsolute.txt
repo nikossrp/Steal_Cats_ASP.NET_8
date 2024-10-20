@@ -7,6 +7,7 @@ C:\Users\serep\OneDrive\Desktop\Web_technologies\.Net_Csharp\Natech_Assessment\S
 C:\Users\serep\OneDrive\Desktop\Web_technologies\.Net_Csharp\Natech_Assessment\Steal_all_Cats\src\StealCatsService\bin\Debug\net8.0\StealCatsService.pdb
 C:\Users\serep\OneDrive\Desktop\Web_technologies\.Net_Csharp\Natech_Assessment\Steal_all_Cats\src\StealCatsService\bin\Debug\net8.0\Azure.Core.dll
 C:\Users\serep\OneDrive\Desktop\Web_technologies\.Net_Csharp\Natech_Assessment\Steal_all_Cats\src\StealCatsService\bin\Debug\net8.0\Azure.Identity.dll
+C:\Users\serep\OneDrive\Desktop\Web_technologies\.Net_Csharp\Natech_Assessment\Steal_all_Cats\src\StealCatsService\bin\Debug\net8.0\DotNetEnv.dll
 C:\Users\serep\OneDrive\Desktop\Web_technologies\.Net_Csharp\Natech_Assessment\Steal_all_Cats\src\StealCatsService\bin\Debug\net8.0\Humanizer.dll
 C:\Users\serep\OneDrive\Desktop\Web_technologies\.Net_Csharp\Natech_Assessment\Steal_all_Cats\src\StealCatsService\bin\Debug\net8.0\Microsoft.AspNetCore.OpenApi.dll
 C:\Users\serep\OneDrive\Desktop\Web_technologies\.Net_Csharp\Natech_Assessment\Steal_all_Cats\src\StealCatsService\bin\Debug\net8.0\Microsoft.Bcl.AsyncInterfaces.dll
@@ -39,6 +40,7 @@ C:\Users\serep\OneDrive\Desktop\Web_technologies\.Net_Csharp\Natech_Assessment\S
 C:\Users\serep\OneDrive\Desktop\Web_technologies\.Net_Csharp\Natech_Assessment\Steal_all_Cats\src\StealCatsService\bin\Debug\net8.0\Microsoft.SqlServer.Server.dll
 C:\Users\serep\OneDrive\Desktop\Web_technologies\.Net_Csharp\Natech_Assessment\Steal_all_Cats\src\StealCatsService\bin\Debug\net8.0\Microsoft.Win32.SystemEvents.dll
 C:\Users\serep\OneDrive\Desktop\Web_technologies\.Net_Csharp\Natech_Assessment\Steal_all_Cats\src\StealCatsService\bin\Debug\net8.0\Mono.TextTemplating.dll
+C:\Users\serep\OneDrive\Desktop\Web_technologies\.Net_Csharp\Natech_Assessment\Steal_all_Cats\src\StealCatsService\bin\Debug\net8.0\Sprache.dll
 C:\Users\serep\OneDrive\Desktop\Web_technologies\.Net_Csharp\Natech_Assessment\Steal_all_Cats\src\StealCatsService\bin\Debug\net8.0\Swashbuckle.AspNetCore.Swagger.dll
 C:\Users\serep\OneDrive\Desktop\Web_technologies\.Net_Csharp\Natech_Assessment\Steal_all_Cats\src\StealCatsService\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\Users\serep\OneDrive\Desktop\Web_technologies\.Net_Csharp\Natech_Assessment\Steal_all_Cats\src\StealCatsService\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerUI.dll

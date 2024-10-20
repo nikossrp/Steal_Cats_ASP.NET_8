@@ -7,6 +7,6 @@ namespace StealCatsService.Entities;
 public class Tag
 {
   public int Id { get; set; }
-  public List<string> Name { get; set; }
+  public string Name { get; set; }
   public ICollection<Cat> Cats { get; set; }
 }
