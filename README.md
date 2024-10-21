@@ -1,6 +1,8 @@
 ## Prerequisites
 Ensure Docker is installed and running on your PC before proceeding.
 
+You need to have installed dotnet-ef, dotnet CLI (version 8)
+
 
 ## Run the API
 1. Install and run DB 
@@ -13,6 +15,10 @@ Ensure Docker is installed and running on your PC before proceeding.
 2. Run the web app 
 
     - Navigate to the root directory of the project (Steal_Cats_ASP.NET_8/src/StealCatsService/).
-    - Run the following command: ` dotnet watch ` 
+    - Run the following commands:
+      
+        `dotnet ef database update`
+      
+        ` dotnet watch ` 
 
     This will start the web app and make the Swagger endpoint available for testing and using API requests.
