@@ -21,4 +21,8 @@ You need to have installed dotnet-ef, dotnet CLI (version 8)
       
         ` dotnet watch ` 
 
-    This will start the web app and make the Swagger endpoint available for testing and using API requests.
+    
+    This will
+   
+   1)  Make your Tables on DB
+   2) Start the web app and make the Swagger endpoint available for testing.
