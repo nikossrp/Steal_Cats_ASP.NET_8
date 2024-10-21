@@ -7,7 +7,7 @@ Ensure Docker is installed and running on your PC before proceeding.
 
     Open the terminal and run the command:  ` docker compose up -d` 
 
-    - Pull the latest image for Microsoft SQL Server from DockerHub: https://hub.docker.com/r/microsoft/mssql-server
+    - Pull the latest image for Microsoft SQL Server from DockerHub: [Microsoft SQL Server](https://hub.docker.com/r/microsoft/mssql-server)
     - It will create a container with your DB ready to store all the information.
 
 2. Run the web app 
