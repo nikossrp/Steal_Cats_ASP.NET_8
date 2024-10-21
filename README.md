@@ -9,22 +9,24 @@ You need to have installed dotnet-ef, dotnet CLI (version 8)
 
     Open the terminal, navigate to the starting point of this project, and run the following command:
 
-    ` docker compose up -d` 
+    ` docker compose up -d`
+   
+    This will:
+     - Pull the latest image for Microsoft SQL Server from DockerHub: [Microsoft SQL Server](https://hub.docker.com/r/microsoft/mssql-server)
+     - It will create a container with your DB ready to store all the information.
 
-    - Pull the latest image for Microsoft SQL Server from DockerHub: [Microsoft SQL Server](https://hub.docker.com/r/microsoft/mssql-server)
-    - It will create a container with your DB ready to store all the information.
+2. Run the web app 
 
-3. Run the web app 
-
-    - Navigate to the root directory of the project (Steal_Cats_ASP.NET_8/src/StealCatsService/).
-    - Run the following commands:
+ - Navigate to the root directory of the project (Steal_Cats_ASP.NET_8/src/StealCatsService/).
+ - Run the following commands:
       
-        `dotnet ef database update`
+     `dotnet ef database update`
+   
       
-        ` dotnet watch ` 
+     ` dotnet watch ` 
 
     
     This will
-   
-   1)  Make your Tables on DB
-   2) Start the web app and make the Swagger endpoint available for testing.
+       
+     - Make your Tables on DB
+     - Start the web app and make the Swagger endpoint available for testing.
