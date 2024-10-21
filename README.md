@@ -1,5 +1,5 @@
 ## Prerequisites
-Ensure that Docker is installed and running on your PC before proceeding.
+Ensure Docker is installed and running on your PC before proceeding.
 
 
 ## Run the API
