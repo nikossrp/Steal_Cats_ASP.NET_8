@@ -20,6 +20,7 @@ namespace StealCatsService.Data.Migrations
                     CatId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Width = table.Column<int>(type: "int", nullable: false),
                     Height = table.Column<int>(type: "int", nullable: false),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -33,32 +34,12 @@ namespace StealCatsService.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    BreedId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Tags", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Image",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Url = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    BreedId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CatImageForeignKey = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Image", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Image_Cats_CatImageForeignKey",
-                        column: x => x.CatImageForeignKey,
-                        principalTable: "Cats",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -89,12 +70,6 @@ namespace StealCatsService.Data.Migrations
                 name: "IX_CatTags_TagsId",
                 table: "CatTags",
                 column: "TagsId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Image_CatImageForeignKey",
-                table: "Image",
-                column: "CatImageForeignKey",
-                unique: true);
         }
 
         /// <inheritdoc />
@@ -104,13 +79,10 @@ namespace StealCatsService.Data.Migrations
                 name: "CatTags");
 
             migrationBuilder.DropTable(
-                name: "Image");
+                name: "Cats");
 
             migrationBuilder.DropTable(
                 name: "Tags");
-
-            migrationBuilder.DropTable(
-                name: "Cats");
         }
     }
 }

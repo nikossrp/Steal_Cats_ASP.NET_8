@@ -54,37 +54,15 @@ namespace StealCatsService.Data.Migrations
                     b.Property<int>("Height")
                         .HasColumnType("int");
 
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Width")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.ToTable("Cats");
-                });
-
-            modelBuilder.Entity("StealCatsService.Entities.CatImage", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("BreedId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("CatImageForeignKey")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Url")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CatImageForeignKey")
-                        .IsUnique();
-
-                    b.ToTable("Image");
                 });
 
             modelBuilder.Entity("StealCatsService.Entities.Tag", b =>
@@ -94,6 +72,9 @@ namespace StealCatsService.Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("BreedId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -116,22 +97,6 @@ namespace StealCatsService.Data.Migrations
                         .HasForeignKey("TagsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("StealCatsService.Entities.CatImage", b =>
-                {
-                    b.HasOne("StealCatsService.Entities.Cat", "Cat")
-                        .WithOne("Image")
-                        .HasForeignKey("StealCatsService.Entities.CatImage", "CatImageForeignKey")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Cat");
-                });
-
-            modelBuilder.Entity("StealCatsService.Entities.Cat", b =>
-                {
-                    b.Navigation("Image");
                 });
 #pragma warning restore 612, 618
         }

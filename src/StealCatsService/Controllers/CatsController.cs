@@ -26,20 +26,22 @@ public class CatsController : ControllerBase
   [HttpPost("fetch")]
   public async Task<IActionResult> FetchCatsImages()
   {
-    int count = 0;    // for let the user know how much images inserted on DB on each fetch request
+    int count = 0;    // keep tracking of the Images adding on each fetch request
     bool boolBreeds = true;
-    int limit = 2;
+    int limit = 25;
     string url =  $"https://api.thecatapi.com/v1/images/search?limit={limit}&has_breeds={boolBreeds}&api_key={apiKey}";
 
     try 
     {
       var response = await _httpClient.GetAsync(url);
-
       if (response.IsSuccessStatusCode) 
       {
         var data = await response.Content.ReadAsStringAsync();
         List<CatDto> dataCatImages = JsonSerializerHelper.CatDeserializer(data);
-        HashSet<string> seenBreedIds = new HashSet<string>();   // store breedId to prevent adding it to the dB again
+        HashSet<string> seenBreedIds = new HashSet<string>();   // store breedId to prevent adding it to the DB again on the current fetch request
+        List<Tag> seenTags = new List<Tag>();
+
+
 
         foreach(var catImage in dataCatImages) 
         {
@@ -51,41 +53,45 @@ public class CatsController : ControllerBase
             cat.CatId = catImage.CatId;
             cat.Width = catImage.Width;
             cat.Height = catImage.Height;
-            cat.Tags = new List<Tag>();
+            cat.ImageUrl = catImage.ImageUrl;
             
             //  Tags on DB
-            var existingTag = await _catDbContent.CatImages
+            var existingTag = await _catDbContent.Tags
               .FirstOrDefaultAsync(v => v.BreedId == catImage.BreedId);
 
-            // check if it exists on DB or exists on fetch request
-            if (existingTag == null)    // empty string means BreedId already exist on List and may have inserted. 
+            // check if it exists on DB 
+            if (existingTag == null)   
             {
+              cat.Tags = new List<Tag>();
+
+              // check if it exists on the list (prevent adding duplicate tags on DB)
               if (!seenBreedIds.Contains(catImage.BreedId))
               {
-                cat.Tags.Add(new Tag { Name = catImage.Breed_Temperament });
-                seenBreedIds.Add(catImage.BreedId);  
+                Tag tempTag = new Tag {
+                  Name = catImage.Breed_Temperament, 
+                  BreedId = catImage.BreedId 
+                };
+
+                cat.Tags.Add(tempTag);
+
+                // keep track on which Tags you have on the fetch request 
+                seenBreedIds.Add(catImage.BreedId); 
+                seenTags.Add(tempTag);      
+              }
+              else {  // if you have already seen this tag on the fetch List, associate with it
+                cat.Tags = new List<Tag> {seenTags.FirstOrDefault(c => c.BreedId == catImage.BreedId)};
               }
             }
-            
-            var existingImage = await _catDbContent.Cats
-              .FirstOrDefaultAsync(v => v.CatId == catImage.CatId);
-            if (existingImage == null) 
-            {
-              cat.Image = new CatImage{ 
-                  Url = catImage.Url, 
-                  BreedId = catImage.BreedId 
-              };
-
-              Console.WriteLine(cat.Image.Url);
-              _catDbContent.Cats.Add(cat);
-
-              count ++;
+            else {    // if already exists on DB associate with it
+                cat.Tags = new List<Tag> {existingTag};
             }
 
+            _catDbContent.Cats.Add(cat);
+            count ++;
           }
         }
-     
         await _catDbContent.SaveChangesAsync();
+     
 
         return Ok($"{limit} fetched from API, {count} Images saved on DB");
       }
@@ -103,60 +109,95 @@ public class CatsController : ControllerBase
   }
 
 
-[HttpGet("{id}")]
-public async Task<IActionResult> GetCatById(string id)
-{
+  [HttpGet("{id}")]
+  public async Task<IActionResult> GetCatById(string id)
+  {
 
-    // Correct SQL query
-    var sqlQuery = @"
-      SELECT c.Id, c.CatId, c.Width, c.Height, i.Url, t.Name
-      FROM Cats c
-      JOIN Image i ON c.Id = i.CatImageForeignKey
-      JOIN CatTags ct on c.Id = ct.TagsId
-      JOIN Tags t ON c.Id = t.Id
-      WHERE c.CatId = @p0";
+      var sqlQuery = @"
+        SELECT c.Id, c.Width, c.Height, c.ImageUrl, t.Name
+        FROM Cats c
+        JOIN CatTags ct ON c.Id = ct.CatsId
+        JOIN Tags t ON c.Id = t.Id
+        WHERE c.CatId = @p0";
 
-    var catTable = await _catDbContent.Cats
-      .FromSqlRaw(sqlQuery, id)
-      .Select(c => new {
-        CatId = c.CatId,
-        Width = c.Width,
-        Height = c.Height,
-        Url = c.Image.Url,
-      })
-      .FirstOrDefaultAsync();
+      var catTable = await _catDbContent.Cats
+        .FromSqlRaw(sqlQuery, id)
+        .Select(c => new {
+          // CatId = c.CatId,
+          Width = c.Width,
+          Height = c.Height,
+          ImageUrl = c.ImageUrl,
+          Temperament = c.Tags.FirstOrDefault().Name    // on this level we have 1 cat
+        })
+        .FirstOrDefaultAsync();
 
 
-    if (catTable == null)
+      if (catTable == null)
+      {
+          return NotFound("Cat data not found in the database");
+      }
+      
+
+      return Ok(catTable);
+  }
+
+
+  [HttpGet]
+  public async Task<IActionResult> GetCatsWithPagingSupport(int page = 1, int pageSize = 10, string tagName = null)
+  {
+    var totalCound = await _catDbContent.Cats.CountAsync();
+    List<Cat> cats = null;
+    List<Tag> tags = null;
+
+    if (tagName == null) 
     {
-        return NotFound("Cat data could not be retrieved");
+      cats = await _catDbContent.Cats
+        .Skip((page - 1) * pageSize)
+        .Take(pageSize)
+        .ToListAsync();
+    }
+    
+    if (tagName != null)
+    {
+
+      // join tables and extract c.Id, c.CatId, c.Width, c.Height, i.Url, t.Name
+      var sqlQuery = @"
+        SELECT *
+        FROM Cats c
+        JOIN CatTags ct ON c.Id = ct.CatsId
+        JOIN Tags t ON c.Id = t.Id
+        WHERE t.Name LIKE '%p0%'";
+
+      var catsTags = await _catDbContent.Cats
+          .FromSqlRaw(sqlQuery, tagName)
+          .Select(c => new {
+            CatId = c.CatId,
+            Width = c.Width,
+            Height = c.Height,
+            ImageUrl = c.ImageUrl,
+          })
+          .Skip((page - 1) * pageSize)
+          .Take(pageSize)
+          .ToListAsync();
+
+      tags = await _catDbContent.Tags
+        .Where(t => t.Name == tagName)
+        .ToListAsync();
+
+      return Ok(catsTags);
     }
 
-    return Ok(catTable);
-}
 
-
-  // [HttpGet]
-  // public async Task<IActionResult> GetCatsWithPagingSupport(int page = 1, int pageSize = 10, string tagName = null)
-  // {
-  //   var totalCound = await _catDbContent.Cats.CountAsync();
-    
-  //   var cats = await _catDbContent.Cats
-  //     .Skip((page - 1) * pageSize)
-  //     .Take(pageSize)
-  //     .ToListAsync();
-
-  //   var results = new { 
-  //     TotalCound = totalCound, 
-  //     Page = page, 
-  //     PageSize = pageSize, 
-  //     Cats = cats
-  //   };
-
-  //   return  Ok(results);
-
-  // }
+    var results = new { 
+      TotalCound = totalCound, 
+      Page = page, 
+      PageSize = pageSize, 
+      Cats = cats
+    };
 
 
 
+
+    return  Ok(results);
+  }
 }

@@ -11,9 +11,9 @@ public class Cat
   public string CatId { get; set;}
   public int Width { get; set;}
   public int Height { get; set;}
+  public string ImageUrl { get; set;}
   public DateTime CreatedAt { get; set;} = DateTime.UtcNow;
   
   // Reference navigation to dependent
-  public CatImage Image { get; set;}    // 1-to-1 relationship
   public ICollection<Tag> Tags {get; set;}  // N <--> N Relationship
 }

@@ -14,19 +14,13 @@ public class CatDbContent : DbContext
 
     public DbSet<Cat> Cats { get; set; }    // Tables Cats
     public DbSet<Tag> Tags { get; set;}
-    public DbSet<CatImage> CatImages { get; set;}
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Cat>()
             .HasMany(c => c.Tags)
-            .WithMany(c => c.Cats);    // Join table for the many-to-many relationship
-            
-
-        modelBuilder.Entity<Cat>() 
-            .HasOne(c => c.Image)
-            .WithOne(i => i.Cat)
-            .HasForeignKey<CatImage>(i => i.CatImageForeignKey);   // Foreign key in Cats table        
+            .WithMany(c => c.Cats)    // Join table for the many-to-many relationship
+            .UsingEntity(t => t.ToTable("CatTags"));    
     }
 
 }

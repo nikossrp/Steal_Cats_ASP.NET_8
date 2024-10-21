@@ -17,7 +17,7 @@ public class JsonSerializerHelper
         CatDto catImage = new CatDto();
         catImage.CatId = item.GetProperty("id").GetString();
 
-        catImage.Url = item.GetProperty("url").GetString();
+        catImage.ImageUrl = item.GetProperty("url").GetString();
         catImage.Width = item.GetProperty("width").GetInt32();
         catImage.Height = item.GetProperty("height").GetInt32();
         if (item.TryGetProperty("breeds", out JsonElement breedsArray))
@@ -29,7 +29,7 @@ public class JsonSerializerHelper
           }
         }
 
-        Console.WriteLine(catImage.Url);
+        Console.WriteLine(catImage.ImageUrl);
 
         catImageList.Add(catImage);
     }
