@@ -1,6 +1,7 @@
 using System;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 using StealCatsService.Data;
 using StealCatsService.Entities;
 
@@ -145,9 +146,8 @@ public class CatsController : ControllerBase
   [HttpGet]
   public async Task<IActionResult> GetCatsWithPagingSupport(int page = 1, int pageSize = 10, string tagName = null)
   {
-    var totalCound = await _catDbContent.Cats.CountAsync();
+    int totalCount = await _catDbContent.Cats.CountAsync();
     List<Cat> cats = null;
-    List<Tag> tags = null;
 
     if (tagName == null) 
     {
@@ -162,12 +162,13 @@ public class CatsController : ControllerBase
 
       // join tables and extract c.Id, c.CatId, c.Width, c.Height, i.Url, t.Name
       var sqlQuery = @"
-        SELECT *
+        SELECT c.Id, c.CatId, c.Width, c.Height, c.ImageUrl, t.Name
         FROM Cats c
         JOIN CatTags ct ON c.Id = ct.CatsId
         JOIN Tags t ON c.Id = t.Id
-        WHERE t.Name LIKE '%p0%'";
+        WHERE t.Name LIKE '%' + @p0 + '%'";
 
+      
       var catsTags = await _catDbContent.Cats
           .FromSqlRaw(sqlQuery, tagName)
           .Select(c => new {
@@ -176,27 +177,32 @@ public class CatsController : ControllerBase
             Height = c.Height,
             ImageUrl = c.ImageUrl,
           })
+          .ToListAsync();
+      
+      totalCount = catsTags.Count();
+
+      catsTags = catsTags
           .Skip((page - 1) * pageSize)
           .Take(pageSize)
-          .ToListAsync();
+          .ToList();
+      
+      var resultsTags = new { 
+        TotalCound = totalCount, 
+        Page = page, 
+        PageSize = pageSize, 
+        Cats = catsTags
+      };
 
-      tags = await _catDbContent.Tags
-        .Where(t => t.Name == tagName)
-        .ToListAsync();
-
-      return Ok(catsTags);
+      return Ok(resultsTags);
     }
 
 
     var results = new { 
-      TotalCound = totalCound, 
+      TotalCound = totalCount, 
       Page = page, 
       PageSize = pageSize, 
       Cats = cats
     };
-
-
-
 
     return  Ok(results);
   }

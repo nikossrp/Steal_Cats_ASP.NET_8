@@ -12,7 +12,7 @@ using StealCatsService.Data;
 namespace StealCatsService.Data.Migrations
 {
     [DbContext(typeof(CatDbContent))]
-    [Migration("20241021120240_Create")]
+    [Migration("20241021160915_Create")]
     partial class Create
     {
         /// <inheritdoc />
@@ -78,6 +78,9 @@ namespace StealCatsService.Data.Migrations
 
                     b.Property<string>("BreedId")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
