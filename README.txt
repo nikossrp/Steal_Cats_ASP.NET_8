@@ -1,4 +1,4 @@
-Prerequisites
+## Prerequisites
 Ensure that Docker is installed and running on your PC before proceeding.
 
 1. Install and run DB 
